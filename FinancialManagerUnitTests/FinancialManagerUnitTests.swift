@@ -13,9 +13,8 @@ class testar_quando_for_fazer_login: XCTestCase {
         
         let registration = registrationVM.validateEmailAndPassword(email: email, password: password)
         
+        // testando se o email e a senha são válidos
         XCTAssertEqual(registration.0, true)
-        print(registration.1)
-        
     }
 
 }

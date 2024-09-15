@@ -10,7 +10,14 @@ struct LoginView: View {
     @State private var repeatPassword: String = ""
     
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            // Image ilustrativa do SpendWise
+            Image(logoParaLogin)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .padding(.top)
+                
             // Title
             HStack(spacing: 0) {
                 Text("Spend")
@@ -63,7 +70,7 @@ struct LoginView: View {
             
             // Form login / sign up
             if isLoginSelected {
-                VStack(spacing: 40) {
+                VStack(spacing: 30) {
                     VStack {
                         TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
                         SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
@@ -130,7 +137,7 @@ struct LoginView: View {
                 }
             } else {
                 VStack {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         TextFieldLoginAndSignup(imageName: "person", titleTextField: "Full name", text: $name)
                         TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
                         SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
@@ -151,9 +158,6 @@ struct LoginView: View {
                     }
                 }
             }
-            
-            
-            Spacer()
         }
     }
 }
