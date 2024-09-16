@@ -3,7 +3,7 @@ import Foundation
 
 class RegistrationViewModel {
     
-    func validateEmailAndPassword(email: String, password: String) -> (Bool, String) {
+    func createUser(name: String, email: String, password: String, repeatPassword: String) -> (Bool, String) {
         
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
@@ -16,13 +16,16 @@ class RegistrationViewModel {
         let passwordPred = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         let isPasswordValid = passwordPred.evaluate(with: password)
         
-        if !isValidEmail {
+        if name.isEmpty && email.isEmpty && password.isEmpty && repeatPassword.isEmpty {
+            return (false, "Campos Inválidos")
+        } else if !isValidEmail {
             return (false, "Email inválido")
         } else if !isPasswordValid {
             return (false, "A senha deve ter pelo menos \(minPasswordLength) caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.")
+        } else if password != repeatPassword {
+            return (false, "As senhas não coincidem")
         } else {
             return (true, "Email e senha válidos")
-        }
-        
+        }        
     }
 }

@@ -27,8 +27,8 @@ struct LoginView: View {
             }
             .font(.largeTitle)
             
+            // SubTitle
             VStack {
-                // SubTitle
                 Text("Welcome to SpendWise")
                     .fontWeight(.semibold)
                 
