@@ -2,7 +2,7 @@
 import Foundation
 import FirebaseAuth
 
-class RegistrationViewModel {
+class RegistrationViewModel { 
     
     func registrationUser(name: String, email: String, password: String, repeatPassword: String) async throws -> (Bool, String) {
         
