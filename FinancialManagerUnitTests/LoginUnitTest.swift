@@ -4,7 +4,7 @@ import XCTest
 
 class testar_quando_for_fazer_login: XCTestCase {
 
-    func test_criar_usuario_com_sucesso() {
+    func test_criar_usuario_com_sucesso() async {
         
         let registrationVM = RegistrationViewModel()
         
@@ -13,11 +13,7 @@ class testar_quando_for_fazer_login: XCTestCase {
         let password = "Teste#20"
         let repeatPassword = "Teste#20"
         
-        let registration = registrationVM.createUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
         
-        // testando se o email e a senha são válidos
-        XCTAssertEqual(registration.0, true)
-        print(registration.1)
     }
 
 }

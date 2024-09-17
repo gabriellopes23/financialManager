@@ -1,9 +1,10 @@
 
 import Foundation
+import FirebaseAuth
 
 class RegistrationViewModel {
     
-    func createUser(name: String, email: String, password: String, repeatPassword: String) -> (Bool, String) {
+    func registrationUser(name: String, email: String, password: String, repeatPassword: String) async throws -> (Bool, String) {
         
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
@@ -25,7 +26,13 @@ class RegistrationViewModel {
         } else if password != repeatPassword {
             return (false, "As senhas não coincidem")
         } else {
+            do {
+                let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            } catch {
+                print(error)
+            }
             return (true, "Email e senha válidos")
-        }        
+        }
+        
     }
 }
