@@ -2,9 +2,9 @@
 import Foundation
 import FirebaseAuth
 
-class RegistrationViewModel { 
+class RegistrationViewModel {
     
-    func registrationUser(name: String, email: String, password: String, repeatPassword: String) async throws -> (Bool, String) {
+    func registrationUser(name: String, email: String, password: String, repeatPassword: String) async -> (Bool, String) {
         
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
@@ -33,6 +33,5 @@ class RegistrationViewModel {
             }
             return (true, "Email e senha válidos")
         }
-        
     }
 }
