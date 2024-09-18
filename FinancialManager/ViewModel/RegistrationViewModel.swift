@@ -26,11 +26,6 @@ class RegistrationViewModel {
         } else if password != repeatPassword {
             return (false, "As senhas não coincidem")
         } else {
-            do {
-                let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            } catch {
-                print(error)
-            }
             return (true, "Email e senha válidos")
         }
     }
