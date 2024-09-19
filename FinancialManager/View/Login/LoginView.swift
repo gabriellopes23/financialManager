@@ -1,5 +1,6 @@
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
     
@@ -8,6 +9,20 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var repeatPassword: String = ""
+    
+    @State private var showMessagerError: Bool = false
+    @State private var messageError: String = ""
+    
+    @StateObject var loginRegistrationVM: LoginRegistrationViewModel
+    
+    private var authService: AuthService
+    
+    init(authService: AuthService) {
+        self.authService = authService
+        
+        let loginRegistrationVM = LoginRegistrationViewModel(authService: authService)
+        self._loginRegistrationVM = StateObject(wrappedValue: loginRegistrationVM)
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -78,7 +93,9 @@ struct LoginView: View {
                     
                     // Button Login
                     Button {
-                        // TODO: IMPLEMENTE THIS
+                        Task {
+                            await loginRegistrationVM.login(withEmail: email, password: password)
+                        }
                     } label: {
                         Text("Login")
                             .padding()
@@ -142,12 +159,27 @@ struct LoginView: View {
                         TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
                         SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
                         SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Reapeat Password", text: $repeatPassword)
+                        
+                        if showMessagerError {
+                            VStack {
+                                Text(messageError)
+                                    .foregroundStyle(.red)
+                                    .minimumScaleFactor(0.7)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
                     }
                     
                     Spacer()
                     
                     Button {
-                        // TODO: IMPLEMENTE THIS
+                        Task {
+                            let result = await loginRegistrationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
+                            
+                            let error = result.1
+                            messageError = error
+                            showMessagerError = true
+                        }
                     } label: {
                         Text("Sign up")
                             .padding()
@@ -163,5 +195,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    LoginView(authService: AuthService())
 }

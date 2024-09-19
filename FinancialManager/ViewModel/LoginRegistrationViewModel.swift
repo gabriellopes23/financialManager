@@ -2,12 +2,20 @@
 import Foundation
 import FirebaseAuth
 
-class RegistrationViewModel: ObservableObject {
+class LoginRegistrationViewModel: ObservableObject {
     
     private var authService: AuthService
     
     init(authService: AuthService) {
         self.authService = authService
+    }
+    
+    func login(withEmail email: String, password: String) async {
+        do {
+            try await authService.login(withEmail: email, password: password)
+        } catch {
+            print(error)
+        }
     }
     
     func registrationUser(name: String, email: String, password: String, repeatPassword: String) async -> (Bool, String) {
@@ -28,7 +36,10 @@ class RegistrationViewModel: ObservableObject {
         } else if !isValidEmail {
             return (false, "Email inválido")
         } else if !isPasswordValid {
-            return (false, "A senha deve ter pelo menos \(minPasswordLength) caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.")
+            return (false, """
+A senha deve ter pelo menos \(minPasswordLength) caracteres
+incluindo letras maiúsculas, minúsculas, números e caracteres especiais.
+""")
         } else if password != repeatPassword {
             return (false, "As senhas não coincidem")
         } else {

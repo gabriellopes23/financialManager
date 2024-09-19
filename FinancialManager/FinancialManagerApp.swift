@@ -15,10 +15,12 @@ struct YourApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    private var authService = AuthService()
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ContentView()
+                ContentView(authService: authService)
             }
         }
     }
