@@ -4,8 +4,11 @@ import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
 
+@MainActor
 class AuthenticationViewModel: ObservableObject {
 
+    @Published var errorMessage: String? = nil
+    
     private var authService: AuthService
     
     init(authService: AuthService) {
@@ -15,13 +18,14 @@ class AuthenticationViewModel: ObservableObject {
     func login(withEmail email: String, password: String) async {
         do {
             try await authService.login(withEmail: email, password: password)
+            errorMessage = nil
         } catch {
-            print(error)
+            errorMessage = "Email ou Senha incorreta. Tente novamente"
         }
     }
     
     func loginWithGoogle() async throws {
-        guard let topVC = await Utilities.shared.topViewController() else {
+        guard let topVC = Utilities.shared.topViewController() else {
             throw URLError(.cannotFindHost)
         }
         

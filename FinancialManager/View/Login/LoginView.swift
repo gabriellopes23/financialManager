@@ -14,6 +14,7 @@ struct LoginView: View {
     
     @State private var showMessagerError: Bool = false
     @State private var messageError: String = ""
+    @State private var showForgotPassword: Bool = false
     
     @StateObject var authenticationVM: AuthenticationViewModel
     
@@ -91,6 +92,11 @@ struct LoginView: View {
                     VStack {
                         TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
                         SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
+                        
+                        if let errorMessage = authenticationVM.errorMessage {
+                            Text(errorMessage)
+                                .foregroundStyle(.red)
+                        }
                     }
                     
                     // Button Login
@@ -138,6 +144,13 @@ struct LoginView: View {
                         .padding(.horizontal)
                     }
                     
+                    // button para restaurar a senha
+                    Button {
+                        showForgotPassword = true
+                    } label: {
+                        Text("Forgot Password? click here")
+                    }
+
                 }
             } else {
                 VStack {
@@ -177,6 +190,9 @@ struct LoginView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showForgotPassword) {
+            
         }
     }
 }
