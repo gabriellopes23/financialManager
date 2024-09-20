@@ -1,6 +1,8 @@
 
 import SwiftUI
 import FirebaseAuth
+import GoogleSignIn
+import GoogleSignInSwift
 
 struct LoginView: View {
     
@@ -13,15 +15,15 @@ struct LoginView: View {
     @State private var showMessagerError: Bool = false
     @State private var messageError: String = ""
     
-    @StateObject var loginRegistrationVM: LoginRegistrationViewModel
+    @StateObject var authenticationVM: AuthenticationViewModel
     
     private var authService: AuthService
     
     init(authService: AuthService) {
         self.authService = authService
         
-        let loginRegistrationVM = LoginRegistrationViewModel(authService: authService)
-        self._loginRegistrationVM = StateObject(wrappedValue: loginRegistrationVM)
+        let authenticationVM = AuthenticationViewModel(authService: authService)
+        self._authenticationVM = StateObject(wrappedValue: authenticationVM)
     }
     
     var body: some View {
@@ -32,7 +34,7 @@ struct LoginView: View {
                 .scaledToFit()
                 .frame(width: 100, height: 100)
                 .padding(.top)
-                
+            
             // Title
             HStack(spacing: 0) {
                 Text("Spend")
@@ -69,7 +71,7 @@ struct LoginView: View {
                     withAnimation(.easeIn(duration: 0.2)) {
                         isLoginSelected = false
                     }
-
+                    
                 } label: {
                     Text("Sign up")
                         .padding(10)
@@ -94,7 +96,7 @@ struct LoginView: View {
                     // Button Login
                     Button {
                         Task {
-                            await loginRegistrationVM.login(withEmail: email, password: password)
+                            await authenticationVM.login(withEmail: email, password: password)
                         }
                     } label: {
                         Text("Login")
@@ -104,7 +106,7 @@ struct LoginView: View {
                             .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
                             .padding(.horizontal)
                     }
-
+                    
                     // Divider
                     HStack {
                         Rectangle()
@@ -117,40 +119,25 @@ struct LoginView: View {
                     }
                     
                     // Button for Sign up
-                    VStack {
-                        // Button login Google
-                        Button {
-                            // TODO: IMPLEMENTE THIS
-                        } label: {
-                            HStack {
-                                Image(googleLogo)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
-                                Text("Sing up using Google")
-                            }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .foregroundStyle(.white)
-                                .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
-                                .padding(.horizontal)
+                    Button {
+                        Task {
+                            try await authenticationVM.loginWithGoogle()
                         }
-                        
-                        // Button login Google
-                        Button {
-                            // TODO: IMPLEMENTE THIS
-                        } label: {
-                            HStack {
-                                Image(systemName: "apple.logo")
-                                Text("Sing up using iCloud")
-                            }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .foregroundStyle(.white)
-                                .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
-                                .padding(.horizontal)
+                    } label: {
+                        HStack {
+                            Image(googleLogo)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                            Text("Sing up using Google")
                         }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .foregroundStyle(.white)
+                        .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
+                        .padding(.horizontal)
                     }
+                    
                 }
             } else {
                 VStack {
@@ -174,7 +161,7 @@ struct LoginView: View {
                     
                     Button {
                         Task {
-                            let result = await loginRegistrationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
+                            let result = await authenticationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
                             
                             let error = result.1
                             messageError = error

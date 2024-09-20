@@ -1,9 +1,11 @@
 
 import Foundation
 import FirebaseAuth
+import GoogleSignIn
+import GoogleSignInSwift
 
-class LoginRegistrationViewModel: ObservableObject {
-    
+class AuthenticationViewModel: ObservableObject {
+
     private var authService: AuthService
     
     init(authService: AuthService) {
@@ -13,6 +15,28 @@ class LoginRegistrationViewModel: ObservableObject {
     func login(withEmail email: String, password: String) async {
         do {
             try await authService.login(withEmail: email, password: password)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func loginWithGoogle() async throws {
+        guard let topVC = await Utilities.shared.topViewController() else {
+            throw URLError(.cannotFindHost)
+        }
+        
+        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+        
+        guard let idToken = gidSignInResult.user.idToken?.tokenString else {
+            throw URLError(.badServerResponse)
+        }
+        let accessToken = gidSignInResult.user.accessToken.tokenString
+        
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                       accessToken: accessToken)
+        
+        do {
+            try await authService.loginWithGoogle(credential: credential)
         } catch {
             print(error)
         }

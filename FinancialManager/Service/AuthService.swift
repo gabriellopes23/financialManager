@@ -19,6 +19,15 @@ class AuthService {
         }
     }
     
+    func loginWithGoogle(credential: AuthCredential) async throws {
+        do {
+            let result = try await Auth.auth().signIn(with: credential)
+            self.userSession = result.user
+        } catch {
+            throw error
+        }
+    }
+    
     func createUser(withEmail email: String, name: String, password: String, repeatPassword: String) async throws {
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
