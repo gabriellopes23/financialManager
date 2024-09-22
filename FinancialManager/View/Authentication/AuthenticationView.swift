@@ -4,7 +4,7 @@ import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
 
-struct LoginView: View {
+struct AuthenticationView: View {
     
     @State private var isLoginSelected: Bool = true
     @State private var name: String = ""
@@ -192,11 +192,15 @@ struct LoginView: View {
             }
         }
         .sheet(isPresented: $showForgotPassword) {
-            
+            NavigationStack {
+                ResetPasswordView(authService: authService)
+            }
+            .presentationDetents([.fraction(0.3)])
+            .presentationCornerRadius(50)
         }
     }
 }
 
 #Preview {
-    LoginView(authService: AuthService())
+    AuthenticationView(authService: AuthService())
 }

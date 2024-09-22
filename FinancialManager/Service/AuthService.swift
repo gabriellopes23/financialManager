@@ -44,6 +44,16 @@ class AuthService {
         self.userSession = nil
     }
     
+    func resetPassword(email: String, resetCompletion: @escaping (Result<Bool,Error>) -> Void) {
+        Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+            if let error = error {
+                resetCompletion(.failure(error))
+            } else {
+                resetCompletion(.success(true))
+            }
+        }
+    }
+    
     private func uploadUserData(withEmail email: String, id: String, name: String) async throws {
         let user = UserModel(id: id, name: name, email: email)
         try await UserService().uploadUserData(user)

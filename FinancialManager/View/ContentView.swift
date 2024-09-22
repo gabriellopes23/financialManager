@@ -27,7 +27,7 @@ struct ContentView: View {
             }
 
         } else {
-            LoginView(authService: authService)
+            AuthenticationView(authService: authService)
         }
     }
 }
