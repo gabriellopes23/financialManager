@@ -1,0 +1,11 @@
+# Ignorar arquivos de sistema
+.DS_Store
+
+# Ignorar pastas de compilação do Xcode
+build/
+DerivedData/
+
+# Ignorar logs e arquivos temporários
+*.log
+*.xcuserstate
+*.xcscmblueprint
