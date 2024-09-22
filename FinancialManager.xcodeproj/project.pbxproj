@@ -6,23 +6,72 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6E09EFFA2C9D9036000BC240 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6E09EFF92C9D9036000BC240 /* GoogleSignIn */; };
+		6E09EFFC2C9D9036000BC240 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E09EFFB2C9D9036000BC240 /* GoogleSignInSwift */; };
+		6E286ED72C99F31A001ED790 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E286ED62C99F31A001ED790 /* FirebaseAuth */; };
+		6E286ED92C99F31A001ED790 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E286ED82C99F31A001ED790 /* FirebaseFirestore */; };
+		6E286EDB2C99F31A001ED790 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6E286EDA2C99F31A001ED790 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6E3BAF912C95FC1800CCDC6E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA9F10C2C95BF1F00B7C8D1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA9F1132C95BF1F00B7C8D1;
+			remoteInfo = FinancialManager;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		6E3BAF8D2C95FC1800CCDC6E /* FinancialManagerUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FinancialManagerUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA9F1142C95BF1F00B7C8D1 /* FinancialManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinancialManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6E09EFF72C9D8EE6000BC240 /* Exceptions for "FinancialManager" folder in "FinancialManager" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6EA9F1132C95BF1F00B7C8D1 /* FinancialManager */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6E3BAF8E2C95FC1800CCDC6E /* FinancialManagerUnitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FinancialManagerUnitTests;
+			sourceTree = "<group>";
+		};
 		6EA9F1162C95BF1F00B7C8D1 /* FinancialManager */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6E09EFF72C9D8EE6000BC240 /* Exceptions for "FinancialManager" folder in "FinancialManager" target */,
+			);
 			path = FinancialManager;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6E3BAF8A2C95FC1800CCDC6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6EA9F1112C95BF1F00B7C8D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E09EFFC2C9D9036000BC240 /* GoogleSignInSwift in Frameworks */,
+				6E286ED72C99F31A001ED790 /* FirebaseAuth in Frameworks */,
+				6E09EFFA2C9D9036000BC240 /* GoogleSignIn in Frameworks */,
+				6E286ED92C99F31A001ED790 /* FirebaseFirestore in Frameworks */,
+				6E286EDB2C99F31A001ED790 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				6EA9F1162C95BF1F00B7C8D1 /* FinancialManager */,
+				6E3BAF8E2C95FC1800CCDC6E /* FinancialManagerUnitTests */,
 				6EA9F1152C95BF1F00B7C8D1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				6EA9F1142C95BF1F00B7C8D1 /* FinancialManager.app */,
+				6E3BAF8D2C95FC1800CCDC6E /* FinancialManagerUnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +99,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6E3BAF8C2C95FC1800CCDC6E /* FinancialManagerUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E3BAF932C95FC1800CCDC6E /* Build configuration list for PBXNativeTarget "FinancialManagerUnitTests" */;
+			buildPhases = (
+				6E3BAF892C95FC1800CCDC6E /* Sources */,
+				6E3BAF8A2C95FC1800CCDC6E /* Frameworks */,
+				6E3BAF8B2C95FC1800CCDC6E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E3BAF922C95FC1800CCDC6E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6E3BAF8E2C95FC1800CCDC6E /* FinancialManagerUnitTests */,
+			);
+			name = FinancialManagerUnitTests;
+			packageProductDependencies = (
+			);
+			productName = FinancialManagerUnitTests;
+			productReference = 6E3BAF8D2C95FC1800CCDC6E /* FinancialManagerUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		6EA9F1132C95BF1F00B7C8D1 /* FinancialManager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6EA9F1222C95BF2100B7C8D1 /* Build configuration list for PBXNativeTarget "FinancialManager" */;
@@ -65,6 +139,11 @@
 			);
 			name = FinancialManager;
 			packageProductDependencies = (
+				6E286ED62C99F31A001ED790 /* FirebaseAuth */,
+				6E286ED82C99F31A001ED790 /* FirebaseFirestore */,
+				6E286EDA2C99F31A001ED790 /* FirebaseStorage */,
+				6E09EFF92C9D9036000BC240 /* GoogleSignIn */,
+				6E09EFFB2C9D9036000BC240 /* GoogleSignInSwift */,
 			);
 			productName = FinancialManager;
 			productReference = 6EA9F1142C95BF1F00B7C8D1 /* FinancialManager.app */;
@@ -80,6 +159,10 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					6E3BAF8C2C95FC1800CCDC6E = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 6EA9F1132C95BF1F00B7C8D1;
+					};
 					6EA9F1132C95BF1F00B7C8D1 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -94,17 +177,29 @@
 			);
 			mainGroup = 6EA9F10B2C95BF1F00B7C8D1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6E286ED52C99F31A001ED790 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				6E09EFF82C9D9036000BC240 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6EA9F1152C95BF1F00B7C8D1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				6EA9F1132C95BF1F00B7C8D1 /* FinancialManager */,
+				6E3BAF8C2C95FC1800CCDC6E /* FinancialManagerUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6E3BAF8B2C95FC1800CCDC6E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6EA9F1122C95BF1F00B7C8D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +210,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6E3BAF892C95FC1800CCDC6E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6EA9F1102C95BF1F00B7C8D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +226,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6E3BAF922C95FC1800CCDC6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA9F1132C95BF1F00B7C8D1 /* FinancialManager */;
+			targetProxy = 6E3BAF912C95FC1800CCDC6E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		6E3BAF942C95FC1800CCDC6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2D6MTUC9RC;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = gabriellopes.FinancialManagerUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinancialManager.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FinancialManager";
+			};
+			name = Debug;
+		};
+		6E3BAF952C95FC1800CCDC6E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2D6MTUC9RC;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = gabriellopes.FinancialManagerUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinancialManager.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FinancialManager";
+			};
+			name = Release;
+		};
 		6EA9F1202C95BF2100B7C8D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -255,6 +401,7 @@
 				DEVELOPMENT_TEAM = 2D6MTUC9RC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinancialManager/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +431,7 @@
 				DEVELOPMENT_TEAM = 2D6MTUC9RC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinancialManager/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,6 +453,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6E3BAF932C95FC1800CCDC6E /* Build configuration list for PBXNativeTarget "FinancialManagerUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E3BAF942C95FC1800CCDC6E /* Debug */,
+				6E3BAF952C95FC1800CCDC6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6EA9F10F2C95BF1F00B7C8D1 /* Build configuration list for PBXProject "FinancialManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -324,6 +481,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6E09EFF82C9D9036000BC240 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		6E286ED52C99F31A001ED790 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6E09EFF92C9D9036000BC240 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E09EFF82C9D9036000BC240 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		6E09EFFB2C9D9036000BC240 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E09EFF82C9D9036000BC240 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		6E286ED62C99F31A001ED790 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E286ED52C99F31A001ED790 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		6E286ED82C99F31A001ED790 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E286ED52C99F31A001ED790 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		6E286EDA2C99F31A001ED790 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E286ED52C99F31A001ED790 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6EA9F10C2C95BF1F00B7C8D1 /* Project object */;
 }
