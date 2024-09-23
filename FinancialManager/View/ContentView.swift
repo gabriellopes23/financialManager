@@ -16,16 +16,7 @@ struct ContentView: View {
     
     var body: some View {
         if authService.userSession != nil {
-            VStack {
-                Text("HomeView")
-                Button {
-                    authService.signOut()
-                } label: {
-                    Text("sair")
-                        .padding()
-                }
-            }
-            
+            TabarView(authService: authService)
         } else {
             AuthenticationView(authService: authService)
         }
