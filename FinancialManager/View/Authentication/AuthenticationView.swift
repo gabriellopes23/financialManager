@@ -15,6 +15,7 @@ struct AuthenticationView: View {
     @State private var showMessagerError: Bool = false
     @State private var messageError: String = ""
     @State private var showForgotPassword: Bool = false
+    @State private var isLoading: Bool = false
     
     @StateObject var authenticationVM: AuthenticationViewModel
     
@@ -28,175 +29,191 @@ struct AuthenticationView: View {
     }
     
     var body: some View {
-        VStack(spacing: 20) {
-            // Image ilustrativa do SpendWise
-            Image(logoParaLogin)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .padding(.top)
-            
-            // Title
-            HStack(spacing: 0) {
-                Text("Spend")
-                    .fontWeight(.bold)
-                Text("Wise")
-                    .fontWeight(.light)
-            }
-            .font(.largeTitle)
-            
-            // SubTitle
-            VStack {
-                Text("Welcome to SpendWise")
-                    .fontWeight(.semibold)
+        if isLoading {
+            ProgressView("Carregando...")
+        } else {
+            VStack(spacing: 20) {
+                // Image ilustrativa do SpendWise
+                Image(logoParaLogin)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .padding(.top)
                 
-                // Massage for login
-                Text("Sign up or login below manage your finances.")
-            }
-            
-            // Buttons login / Sign up
-            HStack(spacing: 0) {
-                Button {
-                    withAnimation(.easeIn(duration: 0.2)) {
-                        isLoginSelected = true
-                    }
-                } label: {
-                    Text("Login")
-                        .padding(10)
+                // Title
+                HStack(spacing: 0) {
+                    Text("Spend")
+                        .fontWeight(.bold)
+                    Text("Wise")
+                        .fontWeight(.light)
                 }
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(isLoginSelected ? .white : .black)
-                .background(RoundedRectangle(cornerRadius: 20).fill(isLoginSelected ? principalColor : .clear))
+                .font(.largeTitle)
                 
-                Button {
-                    withAnimation(.easeIn(duration: 0.2)) {
-                        isLoginSelected = false
-                    }
+                // SubTitle
+                VStack {
+                    Text("Welcome to SpendWise")
+                        .fontWeight(.semibold)
                     
-                } label: {
-                    Text("Sign up")
-                        .padding(10)
+                    // Massage for login
+                    Text("Sign up or login below manage your finances.")
                 }
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(isLoginSelected ? .black : .white)
-                .background(RoundedRectangle(cornerRadius: 20).fill(isLoginSelected ? .clear : principalColor))
                 
-            }
-            .frame(maxWidth: .infinity)
-            .background(RoundedRectangle(cornerRadius: 20).fill(.gray.opacity(0.7)))
-            .padding(.horizontal)
-            
-            // Form login / sign up
-            if isLoginSelected {
-                VStack(spacing: 30) {
-                    VStack {
-                        TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
-                        SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
-                        
-                        if let errorMessage = authenticationVM.errorMessage {
-                            Text(errorMessage)
-                                .foregroundStyle(.red)
-                        }
-                    }
-                    
-                    // Button Login
+                // Buttons login / Sign up
+                HStack(spacing: 0) {
                     Button {
-                        Task {
-                            await authenticationVM.login(withEmail: email, password: password)
+                        withAnimation(.easeIn(duration: 0.2)) {
+                            isLoginSelected = true
                         }
                     } label: {
                         Text("Login")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .foregroundStyle(.white)
-                            .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
-                            .padding(.horizontal)
+                            .padding(10)
                     }
+                    .frame(maxWidth: .infinity)
+                    .foregroundStyle(isLoginSelected ? .white : .black)
+                    .background(RoundedRectangle(cornerRadius: 20).fill(isLoginSelected ? principalColor : .clear))
                     
-                    // Divider
-                    HStack {
-                        Rectangle()
-                            .frame(height: 1)
-                            .opacity(0.5)
-                        Text("Or")
-                        Rectangle()
-                            .frame(height: 1)
-                            .opacity(0.5)
-                    }
-                    
-                    // Button for Sign up
                     Button {
-                        Task {
-                            try await authenticationVM.loginWithGoogle()
+                        withAnimation(.easeIn(duration: 0.2)) {
+                            isLoginSelected = false
                         }
-                    } label: {
-                        HStack {
-                            Image(googleLogo)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                            Text("Sing up using Google")
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .foregroundStyle(.white)
-                        .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
-                        .padding(.horizontal)
-                    }
-                    
-                    // button para restaurar a senha
-                    Button {
-                        showForgotPassword = true
-                    } label: {
-                        Text("Forgot Password? click here")
-                    }
-
-                }
-            } else {
-                VStack {
-                    VStack(spacing: 10) {
-                        TextFieldLoginAndSignup(imageName: "person", titleTextField: "Full name", text: $name)
-                        TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
-                        SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
-                        SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Reapeat Password", text: $repeatPassword)
                         
-                        if showMessagerError {
-                            VStack {
-                                Text(messageError)
-                                    .foregroundStyle(.red)
-                                    .minimumScaleFactor(0.7)
-                                    .multilineTextAlignment(.center)
-                            }
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        Task {
-                            let result = await authenticationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
-                            
-                            let error = result.1
-                            messageError = error
-                            showMessagerError = true
-                        }
                     } label: {
                         Text("Sign up")
+                            .padding(10)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .foregroundStyle(isLoginSelected ? .black : .white)
+                    .background(RoundedRectangle(cornerRadius: 20).fill(isLoginSelected ? .clear : principalColor))
+                    
+                }
+                .frame(maxWidth: .infinity)
+                .background(RoundedRectangle(cornerRadius: 20).fill(.gray.opacity(0.7)))
+                .padding(.horizontal)
+                
+                // Form login / sign up
+                if isLoginSelected {
+                    VStack(spacing: 30) {
+                        VStack {
+                            TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
+                            SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
+                            
+                            if let errorMessage = authenticationVM.errorMessage {
+                                Text(errorMessage)
+                                    .foregroundStyle(.red)
+                            }
+                        }
+                        
+                        // Button Login
+                        Button {
+                            isLoading = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                Task {
+                                    await authenticationVM.login(withEmail: email, password: password)
+                                    isLoading = false
+                                }
+                            }
+                        } label: {
+                            Text("Login")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.white)
+                                .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
+                                .padding(.horizontal)
+                        }
+                        
+                        // Divider
+                        HStack {
+                            Rectangle()
+                                .frame(height: 1)
+                                .opacity(0.5)
+                            Text("Or")
+                            Rectangle()
+                                .frame(height: 1)
+                                .opacity(0.5)
+                        }
+                        
+                        // Button for Sign up
+                        Button {
+                            isLoading = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                Task {
+                                    try await authenticationVM.loginWithGoogle()
+                                    isLoading = false
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Image(googleLogo)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20, height: 20)
+                                Text("Sing up using Google")
+                            }
                             .padding()
                             .frame(maxWidth: .infinity)
                             .foregroundStyle(.white)
                             .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
                             .padding(.horizontal)
+                        }
+                        
+                        // button para restaurar a senha
+                        Button {
+                            showForgotPassword = true
+                        } label: {
+                            Text("Forgot Password? click here")
+                        }
+                        
+                    }
+                } else {
+                    VStack {
+                        VStack(spacing: 10) {
+                            TextFieldLoginAndSignup(imageName: "person", titleTextField: "Full name", text: $name)
+                            TextFieldLoginAndSignup(imageName: "envelope", titleTextField: "Email address", text: $email)
+                            SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Password", text: $password)
+                            SecureFieldLoginAndSignup(imageName: "lock", titleTextField: "Reapeat Password", text: $repeatPassword)
+                            
+                            if showMessagerError {
+                                VStack {
+                                    Text(messageError)
+                                        .foregroundStyle(.red)
+                                        .minimumScaleFactor(0.7)
+                                        .multilineTextAlignment(.center)
+                                }
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            isLoading = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                Task {
+                                    let result = await authenticationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
+                                    
+                                    let error = result.1
+                                    messageError = error
+                                    showMessagerError = true
+                                    isLoading = false
+                                }
+                            }
+                        } label: {
+                            Text("Sign up")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.white)
+                                .background(RoundedRectangle(cornerRadius: 20).fill(principalColor))
+                                .padding(.horizontal)
+                        }
                     }
                 }
             }
-        }
-        .sheet(isPresented: $showForgotPassword) {
-            NavigationStack {
-                ResetPasswordView(authService: authService)
+            .sheet(isPresented: $showForgotPassword) {
+                NavigationStack {
+                    ResetPasswordView(authService: authService)
+                }
+                .presentationDetents([.fraction(0.3)])
+                .presentationCornerRadius(50)
             }
-            .presentationDetents([.fraction(0.3)])
-            .presentationCornerRadius(50)
         }
     }
 }
