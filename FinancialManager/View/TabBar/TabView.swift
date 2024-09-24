@@ -17,7 +17,7 @@ struct TabView: View {
             case TabbedItems.home.rawValue:
                 HomeView()
             case TabbedItems.report.rawValue:
-                Text("Report")
+                ReportView()
             case TabbedItems.trasaction.rawValue:
                 Text("Transaction")
             case TabbedItems.account.rawValue:
