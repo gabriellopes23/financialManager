@@ -12,35 +12,40 @@ struct TabBarView: View {
     }
     
     var body: some View {
-        VStack {
-            switch selectedTab {
-            case TabbedItems.home.rawValue:
-                HomeView()
-            case TabbedItems.report.rawValue:
-                ReportView()
-            case TabbedItems.trasaction.rawValue:
-                TransactionView()
-            case TabbedItems.account.rawValue:
-                AccountView(authService: authService)
-            default:
-                HomeView()
-            }
-            Spacer()
-            ZStack {
-                HStack {
-                    ForEach((TabbedItems.allCases), id: \.self) { item in
-                        Button {
-                            selectedTab = item.rawValue
-                        } label: {
-                            customTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+        ZStack {
+            Color.gray.opacity(0.2)
+                .ignoresSafeArea()
+            
+            VStack {
+                switch selectedTab {
+                case TabbedItems.home.rawValue:
+                    HomeView()
+                case TabbedItems.report.rawValue:
+                    ReportView()
+                case TabbedItems.trasaction.rawValue:
+                    TransactionView()
+                case TabbedItems.account.rawValue:
+                    AccountView(authService: authService)
+                default:
+                    HomeView()
+                }
+                Spacer()
+                ZStack {
+                    HStack {
+                        ForEach((TabbedItems.allCases), id: \.self) { item in
+                            Button {
+                                selectedTab = item.rawValue
+                            } label: {
+                                customTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                            }
                         }
                     }
                 }
+                .padding(6)
+                .frame(height: 70)
+                .background(RoundedRectangle(cornerRadius: 35).fill(.gray))
+                .padding(.horizontal)
             }
-            .padding(6)
-            .frame(height: 70)
-            .background(RoundedRectangle(cornerRadius: 35).fill(.gray))
-            .padding(.horizontal)
         }
     }
 }

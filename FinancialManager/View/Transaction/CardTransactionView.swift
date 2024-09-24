@@ -2,13 +2,17 @@
 import SwiftUI
 
 struct CardTransactionView: View {
+    
+    let value: String
+    let colors: [Color]
+    
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 Text("CARD BALANCE")
                     .font(.footnote)
                     .fontWeight(.semibold)
-                Text("R$1.250,00")
+                Text(value)
                     .font(.title)
                     .fontWeight(.bold)
             }
@@ -24,7 +28,7 @@ struct CardTransactionView: View {
         .padding()
         .background(RoundedRectangle(cornerRadius: 20).fill(
             LinearGradient(
-                colors: [.indigo, .blue, .blue.opacity(0.7)],
+                colors: colors,
                 startPoint: .bottomLeading, endPoint: .topTrailing)))
         .frame(maxWidth: .infinity, maxHeight: 80)
         .foregroundStyle(.white)
@@ -32,5 +36,5 @@ struct CardTransactionView: View {
 }
 
 #Preview {
-    CardTransactionView()
+    CardTransactionView(value: "R$1.250,00", colors: [.indigo, .blue, .blue.opacity(0.7)])
 }
