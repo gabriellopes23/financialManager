@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-struct TabView: View {
+struct TabBarView: View {
     
     @State private var selectedTab: Int = 0
     
@@ -19,7 +19,7 @@ struct TabView: View {
             case TabbedItems.report.rawValue:
                 ReportView()
             case TabbedItems.trasaction.rawValue:
-                Text("Transaction")
+                TransactionView()
             case TabbedItems.account.rawValue:
                 AccountView(authService: authService)
             default:
@@ -46,5 +46,5 @@ struct TabView: View {
 }
 
 #Preview {
-    TabView(authService: AuthService())
+    TabBarView(authService: AuthService())
 }

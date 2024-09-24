@@ -16,7 +16,7 @@ struct ContentView: View {
     
     var body: some View {
         if authService.userSession != nil {
-            TabView(authService: authService)
+            TabBarView(authService: authService)
         } else {
             AuthenticationView(authService: authService)
         }
