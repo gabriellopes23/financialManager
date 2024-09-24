@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-extension TabarView {
+extension TabView {
     func customTabItem(imageName: String, title: String, isActive: Bool) -> some View {
         
         HStack(spacing: 10) {

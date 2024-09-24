@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-struct TabarView: View {
+struct TabView: View {
     
     @State private var selectedTab: Int = 0
     
@@ -46,5 +46,5 @@ struct TabarView: View {
 }
 
 #Preview {
-    TabarView(authService: AuthService())
+    TabView(authService: AuthService())
 }
