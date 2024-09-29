@@ -1,10 +1,15 @@
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
+    @EnvironmentObject var transactionVM: TransactionViewModel
     @State private var hideTotalBalance: Bool = false
-    let totalBalance: String = "R$1.250,00"
+    @State private var showCreateCard: Bool = false
+    
+    @EnvironmentObject var creditCardVM: CreditCardsViewModel
+    
     
     var body: some View {
         VStack(spacing: 25) {
@@ -42,7 +47,7 @@ struct HomeView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Total Balance")
-                    Text(hideTotalBalance ? String(repeating: "*", count: totalBalance.count) : totalBalance)
+                    Text(hideTotalBalance ? String(repeating: "*", count: formatCurrency(transactionVM.totalBalance).count) : formatCurrency(transactionVM.totalBalance))
                         .font(.largeTitle)
                         .fontWeight(.bold)
                 }
@@ -60,58 +65,34 @@ struct HomeView: View {
             
             // My Cards
             VStack(alignment: .leading, spacing: 5) {
-                Text("My Cards")
-                    .font(.title3)
-                    .fontWeight(.semibold)
+                HStack {
+                    Text("My Cards")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Button {
+                        withAnimation {
+                            showCreateCard = true
+                        }
+                    } label: {
+                        HStack {
+                            Text("Add")
+                            Image(systemName: "plus")
+                                .foregroundStyle(textColor)
+                        }
+                    }
+                    
+                }
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Balance")
-                                Text("R$1.250,00")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                
-                                Text("xxxx xxxx xxxx 0000")
-                                    .font(.footnote)
-                                Text("Valid Until 09/27")
-                                    .font(.footnote)
+                if creditCardVM.creditCards.isEmpty {
+                    ContentUnavailableView("Nenhum Cartão cadastrado", systemImage: "creditcard")
+                } else {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(creditCardVM.creditCards, id: \.id) { card in
+                                CreditCardsView(amount: formatCurrency(card.amount), numberCard: card.numberCard, valid: card.valid)
                             }
-                            Spacer()
-                            Text("VISA")
-                                .fontWeight(.heavy)
                         }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 20).fill(
-                            LinearGradient(
-                                colors: [.purple, .indigo, .blue.opacity(0.7)],
-                                startPoint: .bottomLeading, endPoint: .topTrailing)))
-                        .frame(width: 250, height: 150)
-                        .foregroundStyle(.white)
-                        
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Balance")
-                                Text("R$1.250,00")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                
-                                Text("xxxx xxxx xxxx 0000")
-                                    .font(.footnote)
-                                Text("Valid Until 09/27")
-                                    .font(.footnote)
-                            }
-                            Spacer()
-                            Text("VISA")
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 20).fill(
-                            LinearGradient(
-                                colors: [.purple, .indigo, .blue.opacity(0.7)],
-                                startPoint: .bottomLeading, endPoint: .topTrailing)))
-                        .frame(width: 250, height: 150)
-                        .foregroundStyle(.white)
                     }
                 }
             }
@@ -122,85 +103,23 @@ struct HomeView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack {
-                        HStack(spacing: 10) {
-                            Image(systemName: "cup.and.saucer")
-                                .padding(10)
-                                .imageScale(.large)
-                                .background(Circle().fill(.white.opacity(0.7)))
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Coffee")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.black)
-                                Text("Setember 10")
-                                    .font(.subheadline)
-                            }
-                            Spacer()
-                            Text("R$140,00")
-                                .font(.title3)
-                                .fontWeight(.bold)
+                if transactionVM.transactions.isEmpty {
+                    ContentUnavailableView("Nenhuma atividades registrada", systemImage: "pencil.and.list.clipboard")
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        ForEach(transactionVM.transactions, id: \.id) { transaction in
+                            ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount))
                         }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                        .foregroundStyle(.white)
-                        
-                        HStack(spacing: 10) {
-                            Image(systemName: "cup.and.saucer")
-                                .padding(10)
-                                .imageScale(.large)
-                                .background(Circle().fill(.white.opacity(0.7)))
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Coffee")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.black)
-                                Text("Setember 10")
-                                    .font(.subheadline)
-                            }
-                            Spacer()
-                            Text("R$140,00")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                        .foregroundStyle(.white)
-                        
-                        HStack(spacing: 10) {
-                            Image(systemName: "cup.and.saucer")
-                                .padding(10)
-                                .imageScale(.large)
-                                .background(Circle().fill(.white.opacity(0.7)))
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Coffee")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.black)
-                                Text("Setember 10")
-                                    .font(.subheadline)
-                            }
-                            Spacer()
-                            Text("R$140,00")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                        .foregroundStyle(.white)
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showCreateCard) {
+            NavigationStack {
+                CreateCreditCardView()
+            }
+            .presentationDetents([.fraction(0.35)])
+            
         }
         .padding()
     }
@@ -208,4 +127,6 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(TransactionViewModel())
+        .environmentObject(CreditCardsViewModel())
 }

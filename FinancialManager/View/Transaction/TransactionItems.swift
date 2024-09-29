@@ -86,9 +86,9 @@ enum TransactionItems: CaseIterable {
         case .Vestuário:
             return "tshirt"
         case .Lazer_e_entretenimento:
-            return ""
+            return "figure.mind.and.body"
         case .Viagens_e_férias:
-            return ""
+            return "airplane.departure"
         case .Cuidados_pessoais:
             return "person"
         case .Tecnologia:
@@ -102,7 +102,7 @@ enum TransactionItems: CaseIterable {
         case .Aplicativos_e_jogos:
             return "formfitting.gamecontroller"
         case .Doações_e_caridade:
-            return "dollarsign.circle"
+            return "dollarsign.bank.building"
         case .Serviços_de_delivery:
             return "motorcycle"
         }

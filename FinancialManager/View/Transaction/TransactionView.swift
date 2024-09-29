@@ -2,72 +2,120 @@
 import SwiftUI
 
 struct TransactionView: View {
-    @State private var currentPage = 0
-    @State private var inputValue: String = "R$0,00"
-    @State private var selectedItem: TransactionItems = .Alimentação
     
-    let cards = [
-        CardTransactionView(value: "R$1.250,00", colors: [.indigo, .blue, .blue.opacity(0.7)]),
-        CardTransactionView(value: "R$899,80", colors: [.red, .orange, .yellow]),
-        CardTransactionView(value: "R$2.57,09", colors: [.purple, .blue.opacity(0.7), .blue])
-    ]
+    @EnvironmentObject private var transactionVM: TransactionViewModel
+    @EnvironmentObject var creditCardVM: CreditCardsViewModel
+    
+    @State private var selectedItem: TransactionItems? = nil
+    
+    @State private var currentPage = 0
+    @State private var inputValue: String = ""
+    @State private var isIncome: Bool? = nil
+    @State private var showExpenses: Bool = false
+    @State private var showCreditCards: Bool = false
+    @State private var showBalance: Bool = false
+    @State private var showBalanceExpenses: Bool = false
     
     var body: some View {
-        VStack {
-            VStack(spacing: 0) {
-                TabView(selection: $currentPage) {
-                    ForEach(cards.indices, id: \.self) { card in
-                        cards[card]
-                            .tag(card)
+        VStack(spacing: 20) {
+            HStack {
+                Button {
+                    isIncome = true
+                    withAnimation {
+                        showBalance = true
+                        showExpenses = false
+                        
                     }
+                } label: {
+                    Text("Renda")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(.green.opacity(isIncome == true ? 1 : 0.2)))
+                        .foregroundStyle(textColor)
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                .frame(height: 180)
-                .animation(.easeInOut, value: currentPage)
+                Spacer()
+                Button {
+                    isIncome = false
+                    withAnimation {
+                        showExpenses = true
+                        showBalance = false
+                    }
+                } label: {
+                    Text("Despesa")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(.red.opacity(isIncome == false ? 1 : 0.2)))
+                        .foregroundStyle(textColor)
+                }
             }
             .padding(.horizontal)
             
-            Menu {
+            if showBalance {
+                TotalBalanceTransactionView()
+                    .padding(.horizontal)
+            }
+            
+            if showExpenses {
                 VStack {
-                    ForEach((TransactionItems.allCases), id: \.self) { item in
+                    Text("Você quer usar o saldo da conta ou o Cartão de Crédito?")
+                    HStack {
                         Button {
-                            selectedItem = item
+                            withAnimation {
+                                showBalanceExpenses = true
+                                showCreditCards = false
+                            }
                         } label: {
-                            transactionItem(imageName: item.iconName, title: item.title)
+                            Text("Saldo")
                         }
-
+                        
+                        Button {
+                            withAnimation {
+                                showCreditCards = true
+                                showBalanceExpenses = false
+                            }
+                        } label: {
+                            Text("Cartão")
+                        }
                     }
                 }
-            } label: {
-                HStack(spacing: 10) {
-                    Image(systemName: selectedItem.iconName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 35)
-                        .padding()
-                        .background(Circle().fill(.gray))
-                    
-                    Text(selectedItem.title)
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        Spacer()
-                    Image(systemName: "arrow.down")
-                        .imageScale(.large)
-                }
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 20).fill(.gray.opacity(0.7)))
-                .frame(maxWidth: .infinity, maxHeight: 90)
                 .padding(.horizontal)
-                .foregroundStyle(.black)
+                
+                
+                if showBalanceExpenses {
+                    VStack(spacing: 10) {
+                        TotalBalanceTransactionView()
+                        
+                        MenuItemsTransactionView(selectedItem: $selectedItem)
+                    }
+                    .padding(.horizontal)
+                }
+                
+                if showCreditCards {
+                    VStack(spacing: 0) {
+                        TabView(selection: $currentPage) {
+                            ForEach(creditCardVM.creditCards, id: \.id) { card in
+                                CardTransactionView(value: formatCurrency(card.amount), colors: [.red, .orange, .yellow])
+                                    .tag(currentPage)
+                            } 
+                        }
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                        .frame(maxHeight: 160)
+                        .animation(.easeInOut, value: currentPage)
+                        
+                        MenuItemsTransactionView(selectedItem: $selectedItem)
+                    }
+                    .padding(.horizontal)
+                }
             }
 
             
-            
-            KeyboardTransactionView(inputValue: $inputValue)
+            KeyboardTransactionView(selectedItem: $selectedItem, inputValue: $inputValue, isIncome: $isIncome)
         }
     }
 }
 
 #Preview {
     TransactionView()
+        .environmentObject(TransactionViewModel())
+        .environmentObject(CreditCardsViewModel())
 }

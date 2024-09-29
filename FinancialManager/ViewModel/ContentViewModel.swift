@@ -19,8 +19,13 @@ class ContentViewModel: ObservableObject {
     }
     
     private func setupSubscribres() {
-        authService.$userSession.sink { [weak self] user in
-            self?.userSession = user
-        }.store(in: &cancellables)
+        authService.$userSession
+            .receive(on: DispatchQueue.main) // Receber atualizações no Main Thread
+            .sink { [weak self] user in
+                DispatchQueue.main.async {
+                    self?.userSession = user
+                }
+            }
+            .store(in: &cancellables)
     }
 }

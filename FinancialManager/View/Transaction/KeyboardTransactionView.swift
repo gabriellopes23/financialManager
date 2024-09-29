@@ -1,9 +1,14 @@
 
 import SwiftUI
+import SwiftData
 
 struct KeyboardTransactionView: View {
     
+    @EnvironmentObject var transactionVM: TransactionViewModel
+    @Binding var selectedItem: TransactionItems?
+    
     @Binding var inputValue: String
+    @Binding var isIncome: Bool?
     
     let keys: [[String]] = [
         ["1", "2", "3"],
@@ -15,12 +20,18 @@ struct KeyboardTransactionView: View {
         VStack(alignment: .leading, spacing: 10) {
             Spacer()
             HStack(alignment: .bottom) {
-                Text(inputValue)
+                Text(inputValue.isEmpty ? "Digite um Valor" : inputValue)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 Spacer()
                 Button {
+                    if isIncome == true {
+                        transactionVM.addTransaction(TransactionModel(title: "Salário/Renda", iconName: "dollarsign", amount: Double(inputValue) ?? 0.0, type: .income, date: Date(), fromAccount: .account))
+                    } else {
+                        transactionVM.addTransaction(TransactionModel(title: selectedItem?.title ?? "", iconName: selectedItem?.iconName ?? "", amount: Double(inputValue) ?? 0.0, type: .expense, date: Date(), fromAccount: .account))
+                    }
                     
+                    inputValue = ""
                 } label: {
                     Text("Enviar")
                         .padding()
@@ -70,5 +81,6 @@ struct KeyboardTransactionView: View {
 }
 
 #Preview {
-    KeyboardTransactionView(inputValue: .constant("86"))
+    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true))
+        .environmentObject(TransactionViewModel())
 }
