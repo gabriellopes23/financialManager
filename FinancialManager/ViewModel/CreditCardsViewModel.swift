@@ -12,4 +12,11 @@ class CreditCardsViewModel: ObservableObject {
         creditCards.append(creditCard)
     }
     
+    func subtractFromCard(_ creditCard: CreditCardsModel, amount: Double) {
+        
+        if let index = creditCards.firstIndex(where: { $0.id == creditCard.id}) {
+            creditCards[index].amount -= amount
+        }
+    }
+    
 }

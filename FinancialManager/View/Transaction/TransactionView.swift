@@ -15,6 +15,9 @@ struct TransactionView: View {
     @State private var showCreditCards: Bool = false
     @State private var showBalance: Bool = false
     @State private var showBalanceExpenses: Bool = false
+    @State private var isSelectedCard: Bool = false
+    
+    @State private var selectedCard: CreditCardsModel?
     
     var body: some View {
         VStack(spacing: 20) {
@@ -95,12 +98,22 @@ struct TransactionView: View {
                         TabView(selection: $currentPage) {
                             ForEach(creditCardVM.creditCards, id: \.id) { card in
                                 CardTransactionView(value: formatCurrency(card.amount), colors: [.red, .orange, .yellow])
-                                    .tag(currentPage)
-                            } 
+                                    .tag(creditCardVM.creditCards.firstIndex(where: { $0.id == card.id } ) ?? 0)
+                                    .opacity(isSelectedCard ? 1.0 : 0.4)
+                                    .onTapGesture {
+                                        selectedCard = card
+                                        isSelectedCard.toggle()
+                                    }
+                            }
                         }
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                         .frame(maxHeight: 160)
                         .animation(.easeInOut, value: currentPage)
+                        .onChange(of: selectedCard) { newCard in
+                            if let index = creditCardVM.creditCards.firstIndex(where: { $0.id == newCard?.id}) {
+                                currentPage = index
+                            }
+                        }
                         
                         MenuItemsTransactionView(selectedItem: $selectedItem)
                     }
@@ -109,7 +122,7 @@ struct TransactionView: View {
             }
 
             
-            KeyboardTransactionView(selectedItem: $selectedItem, inputValue: $inputValue, isIncome: $isIncome)
+            KeyboardTransactionView(selectedItem: $selectedItem, inputValue: $inputValue, isIncome: $isIncome, showCreditCards: $showCreditCards, selectedCard: selectedCard)
         }
     }
 }

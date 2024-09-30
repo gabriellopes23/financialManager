@@ -21,8 +21,10 @@ struct CreditCardsView: View {
                     .font(.footnote)
             }
             Spacer()
-            Text("VISA")
-                .fontWeight(.heavy)
+//            Image(selecteTypeCard.image)
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 60, height: 30)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 20).fill(

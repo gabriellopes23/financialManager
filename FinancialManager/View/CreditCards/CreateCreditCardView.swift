@@ -9,6 +9,7 @@ struct CreateCreditCardView: View {
     @State private var numberCard: String = ""
     @State private var selectMonth: Int = 1
     @State private var selectYear: Int = 24
+    @State private var selecteTypeCard: CreditCardType = .visa
     
     var body: some View {
         HStack(alignment: .top) {
@@ -64,10 +65,23 @@ struct CreateCreditCardView: View {
             Spacer()
             
             Menu {
-                
+                ForEach(CreditCardType.allCases, id: \.self) { typeCard in
+                    Button {
+                        selecteTypeCard = typeCard
+                    } label: {
+                        HStack {
+                            Text(typeCard.title)
+                            Image(typeCard.image)
+                                .frame(width: 50, height: 30)
+                        }
+                    }
+
+                }
             } label: {
-                Text("VISA")
-                    .fontWeight(.heavy)
+                Image(selecteTypeCard.image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 30)
             }
 
         }

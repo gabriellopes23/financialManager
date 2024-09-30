@@ -1,14 +1,17 @@
 
 import SwiftUI
-import SwiftData
 
 struct KeyboardTransactionView: View {
     
+    @EnvironmentObject var creditCardVM: CreditCardsViewModel
     @EnvironmentObject var transactionVM: TransactionViewModel
     @Binding var selectedItem: TransactionItems?
     
     @Binding var inputValue: String
     @Binding var isIncome: Bool?
+    @Binding var showCreditCards: Bool
+    
+    var selectedCard: CreditCardsModel?
     
     let keys: [[String]] = [
         ["1", "2", "3"],
@@ -25,10 +28,22 @@ struct KeyboardTransactionView: View {
                     .fontWeight(.bold)
                 Spacer()
                 Button {
-                    if isIncome == true {
-                        transactionVM.addTransaction(TransactionModel(title: "Salário/Renda", iconName: "dollarsign", amount: Double(inputValue) ?? 0.0, type: .income, date: Date(), fromAccount: .account))
-                    } else {
-                        transactionVM.addTransaction(TransactionModel(title: selectedItem?.title ?? "", iconName: selectedItem?.iconName ?? "", amount: Double(inputValue) ?? 0.0, type: .expense, date: Date(), fromAccount: .account))
+                    if let amount = Double(inputValue), let isIncome = isIncome {
+                        let transaction = TransactionModel(
+                            title: selectedItem?.title ?? "Transação",
+                            iconName: selectedItem?.iconName ?? "creditcard",
+                            amount: amount,
+                            type: isIncome ? .income : .expense,
+                            date: Date(),
+                            fromAccount: showCreditCards ? .creditCard : .account
+                        )
+                        
+                        transactionVM.addTransaction(transaction)
+                        
+                        // Descontar do saldo do cartão de crédito, se for despesa com cartão
+                        if transaction.fromAccount == .creditCard, let card = selectedCard {
+                            creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                        }
                     }
                     
                     inputValue = ""
@@ -41,7 +56,7 @@ struct KeyboardTransactionView: View {
                         .frame(width: 110, height: 50)
                         .background(RoundedRectangle(cornerRadius: 10).fill(.red))
                 }
-
+                
             }
             .padding(.horizontal)
             
@@ -59,10 +74,10 @@ struct KeyboardTransactionView: View {
                                     .fontWeight(.semibold)
                                     .foregroundStyle(textColor)
                             }
-
+                            
                         }
                     }
-
+                    
                 }
             }
         }
@@ -81,6 +96,7 @@ struct KeyboardTransactionView: View {
 }
 
 #Preview {
-    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true))
+    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(amount: 200, numberCard: "1234", valid: "12/23", type: .visa))
         .environmentObject(TransactionViewModel())
+        .environmentObject(CreditCardsViewModel())
 }

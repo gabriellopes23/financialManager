@@ -1,10 +1,10 @@
 
 import Foundation
 
-struct CreditCardsModel: Identifiable {
+struct CreditCardsModel: Identifiable, Equatable {
     let id = UUID()
     
-    let amount: Double
+    var amount: Double
     let numberCard: String
     let valid: String
     let type: TypeCards
