@@ -1,20 +1,14 @@
 
 import Foundation
 
-enum CreditCardType: CaseIterable {
-    case visa, mastercard, hipercard, elo
+enum CreditCardType: String, CaseIterable {
+    case visa = "Visa"
+    case  mastercard = "MasterCard"
+    case  hipercard = "HiperCard"
+    case  elo = "Elo"
     
     var title: String {
-        switch self {
-        case .visa:
-            return "Visa"
-        case .mastercard:
-            return "MasterCard"
-        case .hipercard:
-            return "HiperCard"
-        case .elo:
-            return "Elo"
-        }
+        return self.rawValue
     }
     
     var image: String {

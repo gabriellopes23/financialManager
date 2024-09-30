@@ -96,7 +96,7 @@ struct KeyboardTransactionView: View {
 }
 
 #Preview {
-    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(amount: 200, numberCard: "1234", valid: "12/23", type: .visa))
+    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa))
         .environmentObject(TransactionViewModel())
         .environmentObject(CreditCardsViewModel())
 }

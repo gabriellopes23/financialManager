@@ -6,6 +6,7 @@ struct CreditCardsView: View {
     let amount: String
     let numberCard: String
     let valid: String
+    let type: CreditCardType
     
     var body: some View {
         HStack(alignment: .top) {
@@ -21,10 +22,10 @@ struct CreditCardsView: View {
                     .font(.footnote)
             }
             Spacer()
-//            Image(selecteTypeCard.image)
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width: 60, height: 30)
+            Image(type.image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 30)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 20).fill(
@@ -37,5 +38,5 @@ struct CreditCardsView: View {
 }
 
 #Preview {
-    CreditCardsView(amount: "R$1.250,00", numberCard: "xxxx xxxx xxxx 0000", valid: "09/27")
+    CreditCardsView(amount: "R$1.250,00", numberCard: "xxxx xxxx xxxx 0000", valid: "09/27", type: .visa)
 }

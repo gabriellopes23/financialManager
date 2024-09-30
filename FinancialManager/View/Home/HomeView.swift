@@ -90,7 +90,7 @@ struct HomeView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(creditCardVM.creditCards, id: \.id) { card in
-                                CreditCardsView(amount: formatCurrency(card.amount), numberCard: card.numberCard, valid: card.valid)
+                                CreditCardsView(amount: formatCurrency(card.amount), numberCard: card.numberCard, valid: card.valid, type: card.typeCard)
                             }
                         }
                     }

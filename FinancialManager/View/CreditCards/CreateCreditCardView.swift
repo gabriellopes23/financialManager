@@ -72,7 +72,7 @@ struct CreateCreditCardView: View {
                         HStack {
                             Text(typeCard.title)
                             Image(typeCard.image)
-                                .frame(width: 50, height: 30)
+                                .frame(width: 60, height: 30)
                         }
                     }
 
@@ -101,7 +101,7 @@ struct CreateCreditCardView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        creditCardVM.addCreditCard(amount: Double(amount) ?? 0.0, numberCard: numberCard, valid: "\(selectMonth)/\(selectYear)", type: .visa)
+                        creditCardVM.addCreditCard(amount: Double(amount) ?? 0.0, numberCard: numberCard, valid: "\(selectMonth)/\(selectYear)", typeCard: selecteTypeCard)
                     } label: {
                         Text("Add")
                             .padding(10)

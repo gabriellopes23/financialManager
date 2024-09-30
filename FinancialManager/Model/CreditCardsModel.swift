@@ -7,9 +7,5 @@ struct CreditCardsModel: Identifiable, Equatable {
     var amount: Double
     let numberCard: String
     let valid: String
-    let type: TypeCards
-    
-    enum TypeCards {
-        case visa, mastercard, elo, hibercard
-    }
+    let typeCard: CreditCardType
 }
