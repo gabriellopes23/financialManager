@@ -3,15 +3,18 @@ import SwiftUI
 import Charts
 
 struct ReportView: View {
+    
+    @EnvironmentObject var transactionVM: TransactionViewModel
+    
     var body: some View {
         VStack(spacing: 20) {
             ZStack {
-                Text("RS1.250,00")
+                Text(formatCurrency(transactionVM.totalBalance))
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 Chart {
                     SectorMark(
-                        angle: .value("value", 5),
+                        angle: .value("Receita", 5),
                         innerRadius: .ratio(0.85),
                         outerRadius: .ratio(1.05),
                         angularInset: 1)
@@ -67,89 +70,20 @@ struct ReportView: View {
             .font(.title3)
             .frame(maxWidth: .infinity)
             
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack {
-                    HStack(spacing: 10) {
-                        Image(systemName: "cup.and.saucer")
-                            .padding(10)
-                            .imageScale(.large)
-                            .background(Circle().fill(.white.opacity(0.7)))
-                            .frame(width: 40, height: 40)
-                            .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Coffee")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                            Text("Setember 10")
-                                .font(.subheadline)
-                        }
-                        Spacer()
-                        Text("R$140,00")
-                            .font(.title3)
-                            .fontWeight(.bold)
+            if transactionVM.transactions.isEmpty {
+                ContentUnavailableView("Nenhuma atividades registrada", systemImage: "pencil.and.list.clipboard")
+            } else {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(transactionVM.transactions, id: \.id) { transaction in
+                        ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount))
                     }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                    .foregroundStyle(.white)
-                    
-                    HStack(spacing: 10) {
-                        Image(systemName: "cup.and.saucer")
-                            .padding(10)
-                            .imageScale(.large)
-                            .background(Circle().fill(.white.opacity(0.7)))
-                            .frame(width: 40, height: 40)
-                            .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Coffee")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                            Text("Setember 10")
-                                .font(.subheadline)
-                        }
-                        Spacer()
-                        Text("R$140,00")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                    .foregroundStyle(.white)
-                    
-                    HStack(spacing: 10) {
-                        Image(systemName: "cup.and.saucer")
-                            .padding(10)
-                            .imageScale(.large)
-                            .background(Circle().fill(.white.opacity(0.7)))
-                            .frame(width: 40, height: 40)
-                            .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Coffee")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                            Text("Setember 10")
-                                .font(.subheadline)
-                        }
-                        Spacer()
-                        Text("R$140,00")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
-                    .foregroundStyle(.white)
                 }
             }
         }
-        .padding()
     }
 }
 
 #Preview {
     ReportView()
+        .environmentObject(TransactionViewModel())
 }

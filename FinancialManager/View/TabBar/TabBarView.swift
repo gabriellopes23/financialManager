@@ -3,6 +3,8 @@ import SwiftUI
 
 struct TabBarView: View {
     
+    @EnvironmentObject var transactionVM: TransactionViewModel
+    @EnvironmentObject var creditCardVM: CreditCardsViewModel
     
     @State private var selectedTab: Int = 0
     
@@ -53,4 +55,6 @@ struct TabBarView: View {
 
 #Preview {
     TabBarView(authService: AuthService())
+        .environmentObject(TransactionViewModel())
+        .environmentObject(CreditCardsViewModel())
 }
