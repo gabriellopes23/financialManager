@@ -188,7 +188,7 @@ struct AuthenticationView: View {
                             isLoading = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 Task {
-                                    let result = await authenticationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword)
+                                    let result = await authenticationVM.registrationUser(name: name, email: email, password: password, repeatPassword: repeatPassword, profileImage: nil)
                                     
                                     let error = result.1
                                     messageError = error

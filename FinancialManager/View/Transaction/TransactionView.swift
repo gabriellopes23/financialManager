@@ -94,30 +94,34 @@ struct TransactionView: View {
                 }
                 
                 if showCreditCards {
-                    VStack(spacing: 0) {
-                        TabView(selection: $currentPage) {
-                            ForEach(creditCardVM.creditCards, id: \.id) { card in
-                                CardTransactionView(value: formatCurrency(card.amount), colors: [.red, .orange, .yellow])
-                                    .tag(creditCardVM.creditCards.firstIndex(where: { $0.id == card.id } ) ?? 0)
-                                    .opacity(isSelectedCard ? 1.0 : 0.4)
-                                    .onTapGesture {
-                                        selectedCard = card
-                                        isSelectedCard.toggle()
-                                    }
+                    if creditCardVM.creditCards.isEmpty {
+                        ContentUnavailableView("Nenhum Cartão cadastrado", systemImage: "creditcard")
+                    } else {
+                        VStack(spacing: 0) {
+                            TabView(selection: $currentPage) {
+                                ForEach(creditCardVM.creditCards, id: \.id) { card in
+                                    CardTransactionView(value: formatCurrency(card.amount))
+                                        .tag(creditCardVM.creditCards.firstIndex(where: { $0.id == card.id } ) ?? 0)
+                                        .opacity(isSelectedCard ? 1.0 : 0.4)
+                                        .onTapGesture {
+                                            selectedCard = card
+                                            isSelectedCard.toggle()
+                                        }
+                                }
                             }
-                        }
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                        .frame(maxHeight: 160)
-                        .animation(.easeInOut, value: currentPage)
-                        .onChange(of: selectedCard) { newCard in
-                            if let index = creditCardVM.creditCards.firstIndex(where: { $0.id == newCard?.id}) {
-                                currentPage = index
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                            .frame(maxHeight: 160)
+                            .animation(.easeInOut, value: currentPage)
+                            .onChange(of: selectedCard) { _, newCard in
+                                if let index = creditCardVM.creditCards.firstIndex(where: { $0.id == newCard?.id}) {
+                                    currentPage = index
+                                }
                             }
+                            
+                            MenuItemsTransactionView(selectedItem: $selectedItem)
                         }
-                        
-                        MenuItemsTransactionView(selectedItem: $selectedItem)
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
             }
 

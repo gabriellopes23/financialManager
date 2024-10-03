@@ -46,7 +46,7 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    func registrationUser(name: String, email: String, password: String, repeatPassword: String) async -> (Bool, String) {
+    func registrationUser(name: String, email: String, password: String, repeatPassword: String, profileImage: String?) async -> (Bool, String) {
         
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
@@ -72,7 +72,7 @@ incluindo letras maiúsculas, minúsculas, números e caracteres especiais.
             return (false, "As senhas não coincidem")
         } else {
             do {
-                try await authService.createUser(withEmail: email, name: name, password: password, repeatPassword: repeatPassword)
+                try await authService.createUser(withEmail: email, name: name, password: password, repeatPassword: repeatPassword, profileImage: profileImage)
             } catch {
                 print(error)
             }

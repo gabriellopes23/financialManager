@@ -1,7 +1,7 @@
 
 import Foundation
 
-enum CreditCardType: String, CaseIterable {
+enum CreditCardType: String, Codable, CaseIterable {
     case visa = "Visa"
     case  mastercard = "MasterCard"
     case  hipercard = "HiperCard"

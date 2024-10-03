@@ -7,22 +7,35 @@ struct HomeView: View {
     @EnvironmentObject var transactionVM: TransactionViewModel
     @State private var hideTotalBalance: Bool = false
     @State private var showCreateCard: Bool = false
+    @State private var userName: String = ""
+    @State private var profileImage: UIImage?
+    @State private var downloadURL: URL?
     
     @EnvironmentObject var creditCardVM: CreditCardsViewModel
-    
+    @EnvironmentObject var authService: AuthService
     
     var body: some View {
         VStack(spacing: 25) {
             // seção bem vindo
             HStack(spacing: 10) {
                 // Foto do usuário
-                Image(systemName: "person")
-                    .imageScale(.large)
-                    .padding()
-                    .background(Circle().fill(.gray))
+                
+                if let imageUrl = authService.profileImageUrl {
+                    ImageFromURL(url: imageUrl) // Carregar a imagem localmente
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .padding()
+                        .background(Circle().fill(.gray.opacity(0.6)))
+                }
                 
                 VStack(alignment: .leading) {
-                    Text("Hi, Gabriel!")
+                    Text("Hi, \(authService.userName)!")
                     HStack {
                         Text("Welcome")
                         HStack(spacing: 0) {
@@ -33,7 +46,7 @@ struct HomeView: View {
                     }
                     .font(.title3)
                 }
-                Spacer()
+                Spacer()    
                 Button {
                     // TODO: Implement this
                 } label: {
@@ -116,17 +129,24 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showCreateCard) {
             NavigationStack {
-                CreateCreditCardView()
+                CreateCreditCardView(authService: authService)
             }
-            .presentationDetents([.fraction(0.35)])
-            
+            .presentationDetents([.fraction(0.5)])
+        }
+        .onAppear {
+            Task {
+                guard let userId = authService.userSession?.uid else { return }
+                try await creditCardVM.fetchUserCreditCards(userId: userId)
+            }
         }
         .padding()
     }
+    
 }
 
 #Preview {
     HomeView()
         .environmentObject(TransactionViewModel())
         .environmentObject(CreditCardsViewModel())
+        .environmentObject(AuthService())
 }

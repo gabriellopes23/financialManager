@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct CreditCardsView: View {
-    
+
     let amount: String
     let numberCard: String
     let valid: String
@@ -16,8 +16,12 @@ struct CreditCardsView: View {
                     .font(.title3)
                     .fontWeight(.bold)
                 
-                Text(numberCard)
-                    .font(.footnote)
+                HStack {
+                    Text("xxxx xxxx xxxx")
+                        .font(.footnote)
+                    Text(numberCard)
+                        .font(.footnote)
+                }
                 Text("Valid Until \(valid)")
                     .font(.footnote)
             }
@@ -30,10 +34,11 @@ struct CreditCardsView: View {
         .padding()
         .background(RoundedRectangle(cornerRadius: 20).fill(
             LinearGradient(
-                colors: [.purple, .indigo, .blue.opacity(0.7)],
+                colors: [.blue, .indigo, .blue],
                 startPoint: .bottomLeading, endPoint: .topTrailing)))
         .frame(width: 250, height: 150)
         .foregroundStyle(.white)
+        
     }
 }
 

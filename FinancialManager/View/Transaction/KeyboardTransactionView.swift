@@ -19,6 +19,7 @@ struct KeyboardTransactionView: View {
         ["7", "8", "9"],
         [".", "0", "⌫"],
     ]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Spacer()
@@ -30,8 +31,8 @@ struct KeyboardTransactionView: View {
                 Button {
                     if let amount = Double(inputValue), let isIncome = isIncome {
                         let transaction = TransactionModel(
-                            title: selectedItem?.title ?? "Transação",
-                            iconName: selectedItem?.iconName ?? "creditcard",
+                            title: selectedItem?.title ?? "Receita",
+                            iconName: selectedItem?.iconName ?? "dollarsign",
                             amount: amount,
                             type: isIncome ? .income : .expense,
                             date: Date(),
@@ -42,7 +43,9 @@ struct KeyboardTransactionView: View {
                         
                         // Descontar do saldo do cartão de crédito, se for despesa com cartão
                         if transaction.fromAccount == .creditCard, let card = selectedCard {
-                            creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                            Task {
+                                try await creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                            }
                         }
                     }
                     
@@ -96,7 +99,7 @@ struct KeyboardTransactionView: View {
 }
 
 #Preview {
-    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa))
+    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(userId: "", amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa))
         .environmentObject(TransactionViewModel())
         .environmentObject(CreditCardsViewModel())
 }

@@ -4,7 +4,6 @@ import SwiftUI
 struct CardTransactionView: View {
     
     let value: String
-    let colors: [Color]
     
     var body: some View {
         HStack {
@@ -28,7 +27,7 @@ struct CardTransactionView: View {
         .padding()
         .background(RoundedRectangle(cornerRadius: 20).fill(
             LinearGradient(
-                colors: colors,
+                colors: [.blue, .indigo, .blue],
                 startPoint: .bottomLeading, endPoint: .topTrailing)))
         .frame(maxWidth: .infinity, maxHeight: 80)
         .foregroundStyle(.white)
@@ -36,5 +35,5 @@ struct CardTransactionView: View {
 }
 
 #Preview {
-    CardTransactionView(value: "R$1.250,00", colors: [.indigo, .blue, .blue.opacity(0.7)])
+    CardTransactionView(value: "R$1.250,00")
 }

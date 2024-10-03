@@ -23,6 +23,7 @@ struct TabBarView: View {
                 switch selectedTab {
                 case TabbedItems.home.rawValue:
                     HomeView()
+                        .environmentObject(authService)
                 case TabbedItems.report.rawValue:
                     ReportView()
                 case TabbedItems.trasaction.rawValue:
@@ -31,6 +32,7 @@ struct TabBarView: View {
                     AccountView(authService: authService)
                 default:
                     HomeView()
+                        .environmentObject(authService)
                 }
                 Spacer()
                 ZStack {

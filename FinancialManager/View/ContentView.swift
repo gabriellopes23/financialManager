@@ -15,10 +15,15 @@ struct ContentView: View {
     }
     
     var body: some View {
-        if authService.userSession != nil {
-            TabBarView(authService: authService)
-        } else {
-            AuthenticationView(authService: authService)
+        Group {
+             if authService.userSession != nil {
+                TabBarView(authService: authService)
+            } else {
+                AuthenticationView(authService: authService)
+            }
+        }
+        .onAppear {
+            authService.updateUserSession()
         }
     }
 }
