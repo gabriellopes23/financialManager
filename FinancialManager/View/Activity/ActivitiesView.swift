@@ -32,7 +32,7 @@ struct ActivitiesView: View {
                     .fontWeight(.bold)
             }
             .padding()
-            .background(RoundedRectangle(cornerRadius: 20).fill(.principal))
+            .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.indigo, .blue.opacity(0.4), .indigo.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)))
             .foregroundStyle(.white)
         }
     }

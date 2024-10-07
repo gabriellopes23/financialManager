@@ -22,11 +22,49 @@ class CreditCardsViewModel: ObservableObject {
     
     func subtractFromCard(_ creditCard: CreditCardsModel, amount: Double) async throws {
         
-        if let index = creditCards.firstIndex(where: { $0.id == creditCard.id}) {
-            creditCards[index].amount -= amount
+        let cardRef = Firestore.firestore().collection("creditCards")
+        
+        let querySnapshot = try await cardRef.whereField("userId", isEqualTo: creditCard.userId).getDocuments()
+        
+        if let document = querySnapshot.documents.first {
+            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id}) {
+                creditCards[index].amount -= amount
+                
+                let upadateAmount = creditCards[index].amount
+                let cardData: [String: Any] = ["amount": upadateAmount]
+                
+                try await Firestore.firestore().collection("creditCards").document(document.documentID).updateData(cardData)
+            }
+        } else {
+            print("Documento nao encontrado: \(creditCard.userId)")
+        }
+    }
+    
+    func updateCreditCard(creditCard: CreditCardsModel) async throws {
+        let cardData = try Firestore.Encoder().encode(creditCard)
+        
+        try await Firestore.firestore().collection("creditCards").document(creditCard.id).updateData(cardData)
+        
+        if let index = creditCards.firstIndex(where:  { $0.id == creditCard.id}) {
+            creditCards[index] = creditCard
+        }
+    }
+    
+    func deleteCreditCard(creditCard: CreditCardsModel) async throws {
+        
+        let cardRef = Firestore.firestore().collection("creditCards")
+        
+        let querySnapshot = try await cardRef.whereField("userId", isEqualTo: creditCard.userId).getDocuments()
+        
+        if let document = querySnapshot.documents.first {
             
-            let cardData = try Firestore.Encoder().encode(creditCards[index])
-            try await Firestore.firestore().collection("creditCards").document(creditCards[index].id).setData(cardData)
+            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {
+                creditCards.remove(at: index)
+                
+                try await Firestore.firestore().collection("creditCards").document(document.documentID).delete()
+            }
+        } else {
+            print("CreditCard não deletado")
         }
     }
     

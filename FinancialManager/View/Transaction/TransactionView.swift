@@ -19,6 +19,12 @@ struct TransactionView: View {
     
     @State private var selectedCard: CreditCardsModel?
     
+    private var authService: AuthService
+    
+    init(authService: AuthService) {
+        self.authService = authService
+    }
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -127,12 +133,13 @@ struct TransactionView: View {
 
             
             KeyboardTransactionView(selectedItem: $selectedItem, inputValue: $inputValue, isIncome: $isIncome, showCreditCards: $showCreditCards, selectedCard: selectedCard)
+                .environmentObject(authService)
         }
     }
 }
 
 #Preview {
-    TransactionView()
+    TransactionView(authService: AuthService())
         .environmentObject(TransactionViewModel())
         .environmentObject(CreditCardsViewModel())
 }

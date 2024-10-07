@@ -27,7 +27,7 @@ struct TabBarView: View {
                 case TabbedItems.report.rawValue:
                     ReportView()
                 case TabbedItems.trasaction.rawValue:
-                    TransactionView()
+                    TransactionView(authService: authService)
                 case TabbedItems.account.rawValue:
                     AccountView(authService: authService)
                 default:

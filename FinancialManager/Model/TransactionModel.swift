@@ -1,8 +1,10 @@
 
 import Foundation
 
-struct TransactionModel: Identifiable {
-    var id = UUID()
+struct TransactionModel: Identifiable, Codable {
+    var id = UUID().uuidString
+    
+    var userId: String
     var title: String
     var iconName: String
     var amount: Double
@@ -10,11 +12,11 @@ struct TransactionModel: Identifiable {
     var date: Date
     var fromAccount: AccountType
     
-    enum TransactionType {
+    enum TransactionType: Codable {
         case income, expense
     }
     
-    enum AccountType {
+    enum AccountType: Codable {
         case account, creditCard
     }
 }

@@ -5,6 +5,7 @@ struct KeyboardTransactionView: View {
     
     @EnvironmentObject var creditCardVM: CreditCardsViewModel
     @EnvironmentObject var transactionVM: TransactionViewModel
+    @EnvironmentObject var authService: AuthService
     @Binding var selectedItem: TransactionItems?
     
     @Binding var inputValue: String
@@ -12,6 +13,7 @@ struct KeyboardTransactionView: View {
     @Binding var showCreditCards: Bool
     
     var selectedCard: CreditCardsModel?
+    
     
     let keys: [[String]] = [
         ["1", "2", "3"],
@@ -29,8 +31,9 @@ struct KeyboardTransactionView: View {
                     .fontWeight(.bold)
                 Spacer()
                 Button {
-                    if let amount = Double(inputValue), let isIncome = isIncome {
+                    if let amount = Double(inputValue), let isIncome = isIncome, let userId = authService.userSession?.uid {
                         let transaction = TransactionModel(
+                            userId: userId,
                             title: selectedItem?.title ?? "Receita",
                             iconName: selectedItem?.iconName ?? "dollarsign",
                             amount: amount,
@@ -39,7 +42,9 @@ struct KeyboardTransactionView: View {
                             fromAccount: showCreditCards ? .creditCard : .account
                         )
                         
-                        transactionVM.addTransaction(transaction)
+                        Task {
+                            try await transactionVM.addTransaction(transaction)
+                        }
                         
                         // Descontar do saldo do cartão de crédito, se for despesa com cartão
                         if transaction.fromAccount == .creditCard, let card = selectedCard {
@@ -102,4 +107,5 @@ struct KeyboardTransactionView: View {
     KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(userId: "", amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa))
         .environmentObject(TransactionViewModel())
         .environmentObject(CreditCardsViewModel())
+        .environmentObject(AuthService())
 }
