@@ -41,15 +41,15 @@ struct KeyboardTransactionView: View {
                             date: Date(),
                             fromAccount: showCreditCards ? .creditCard : .account
                         )
-                        
+
                         Task {
                             try await transactionVM.addTransaction(transaction)
-                        }
-                        
-                        // Descontar do saldo do cartão de crédito, se for despesa com cartão
-                        if transaction.fromAccount == .creditCard, let card = selectedCard {
-                            Task {
-                                try await creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                            
+                            // Se a transação for uma despesa e usar cartão de crédito, desconta somente do cartão
+                            if transaction.fromAccount == .creditCard, !isIncome {
+                                if let card = selectedCard {
+                                    try await creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                                }
                             }
                         }
                     }
@@ -104,8 +104,8 @@ struct KeyboardTransactionView: View {
 }
 
 #Preview {
-    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(userId: "", amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa))
-        .environmentObject(TransactionViewModel())
+    KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(userId: "", amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa, invoiceDueDate: 1))
+        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
         .environmentObject(AuthService())
 }

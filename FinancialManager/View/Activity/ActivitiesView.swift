@@ -8,6 +8,12 @@ struct ActivitiesView: View {
     let date: String
     let amount: String
     
+    @Binding var deleteActivity: Bool
+    @EnvironmentObject var transactionVM: TransactionViewModel
+    @EnvironmentObject var creditCard: CreditCardsViewModel
+    
+    let deleteTransaction: TransactionModel?
+    
     var body: some View {
         VStack {
             HStack(spacing: 10) {
@@ -30,6 +36,20 @@ struct ActivitiesView: View {
                 Text(amount)
                     .font(.title3)
                     .fontWeight(.bold)
+                
+                if deleteActivity {
+                    Button {
+                        Task {
+                            if let transaction = deleteTransaction {
+                                try await transactionVM.deleteTransaction(transaction: transaction)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "trash")
+                            .padding()
+                    }
+
+                }
             }
             .padding()
             .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.indigo, .blue.opacity(0.4), .indigo.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)))

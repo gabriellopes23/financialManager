@@ -30,5 +30,5 @@ struct TotalBalanceTransactionView: View {
 
 #Preview {
     TotalBalanceTransactionView()
-        .environmentObject(TransactionViewModel())
+        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
 }

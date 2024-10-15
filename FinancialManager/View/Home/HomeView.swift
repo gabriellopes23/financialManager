@@ -11,9 +11,11 @@ struct HomeView: View {
     @State private var profileImage: UIImage?
     @State private var downloadURL: URL?
     @State private var isEditingCard: CreditCardsModel? = nil
+    @State private var deleteActivity: Bool = false
     
     @EnvironmentObject var creditCardVM: CreditCardsViewModel
     @EnvironmentObject var authService: AuthService
+    
     
     var body: some View {
         NavigationStack {
@@ -127,7 +129,12 @@ struct HomeView: View {
                     } else {
                         ScrollView(.vertical, showsIndicators: false) {
                             ForEach(transactionVM.transactions, id: \.id) { transaction in
-                                ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount))
+                                ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount), deleteActivity: $deleteActivity, deleteTransaction: transaction)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            deleteActivity.toggle()
+                                        }
+                                    }
                             }
                         }
                     }
@@ -152,7 +159,7 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environmentObject(TransactionViewModel())
+        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
         .environmentObject(AuthService())
 }

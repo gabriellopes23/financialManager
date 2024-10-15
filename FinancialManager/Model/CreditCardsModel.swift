@@ -8,10 +8,10 @@ struct CreditCardsModel: Identifiable, Codable, Equatable {
     var numberCard: String
     var valid: String
     var typeCard: CreditCardType
-     // Keep nested arrays for in-app representation
+    var invoiceDueDate: Int
     
     enum CodingKeys: String, CodingKey {
-        case id, userId, amount, numberCard, valid, typeCard
+        case id, userId, amount, numberCard, valid, typeCard, invoiceDueDate
     }
 }
 

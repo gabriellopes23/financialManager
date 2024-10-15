@@ -7,8 +7,8 @@ class CreditCardsViewModel: ObservableObject {
     
     @Published var creditCards: [CreditCardsModel] = []
     
-    func addCreditCard(amount: Double, numberCard: String, valid: String, typeCard: CreditCardType, userId: String) async throws {
-        let creditCard = CreditCardsModel(userId: userId, amount: amount, numberCard: numberCard, valid: valid, typeCard: typeCard)
+    func addCreditCard(amount: Double, numberCard: String, valid: String, typeCard: CreditCardType, userId: String, invoiceDueDate: Int) async throws {
+        let creditCard = CreditCardsModel(userId: userId, amount: amount, numberCard: numberCard, valid: valid, typeCard: typeCard, invoiceDueDate: invoiceDueDate)
         
         do {
             let cardData = try Firestore.Encoder().encode(creditCard)
@@ -58,7 +58,7 @@ class CreditCardsViewModel: ObservableObject {
         
         if let document = querySnapshot.documents.first {
             
-            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {
+            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {                
                 creditCards.remove(at: index)
                 
                 try await Firestore.firestore().collection("creditCards").document(document.documentID).delete()

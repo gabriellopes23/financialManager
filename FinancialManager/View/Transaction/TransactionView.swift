@@ -140,6 +140,6 @@ struct TransactionView: View {
 
 #Preview {
     TransactionView(authService: AuthService())
-        .environmentObject(TransactionViewModel())
+        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
 }

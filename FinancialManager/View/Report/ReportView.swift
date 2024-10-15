@@ -9,6 +9,7 @@ struct ReportView: View {
     @State private var selectedPeriod: TimePeriod = .month
     @State private var isSelected: Int = 2
     @State private var currentPage: Int = 0
+    @State private var deleteActivity: Bool = false
     
     var filteredTransaction: [TransactionModel] {
         filterTransaction(for: selectedPeriod)
@@ -132,7 +133,12 @@ struct ReportView: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(filteredTransaction, id: \.id) { transaction in
-                        ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount))
+                        ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount), deleteActivity: $deleteActivity, deleteTransaction: transaction)
+                            .onTapGesture {
+                                withAnimation {
+                                    deleteActivity.toggle()
+                                }
+                            }
                     }
                 }
             }
@@ -174,6 +180,6 @@ struct ReportView: View {
 
 #Preview {
     ReportView()
-        .environmentObject(TransactionViewModel())
+        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
 }
