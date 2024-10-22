@@ -206,7 +206,7 @@ struct CreateCreditCardView: View {
                                         updateCard.typeCard = selecteTypeCard
                                         updateCard.invoiceDueDate = selectDay
                                         
-                                        try await creditCardVM.updateCreditCard(creditCard: updateCard)
+                                        try await creditCardVM.updateCreditCard(creditCard: updateCard, amount: updateCard.amount)
                                     } else {
                                         try await creditCardVM.addCreditCard(amount: Double(amount) ?? 0.0, numberCard: numberCard, valid: "\(selectMonth)/\(selectYear)", typeCard: selecteTypeCard, userId: userId, invoiceDueDate: selectDay)
                                     }
@@ -251,7 +251,7 @@ struct CreateCreditCardView: View {
                                     updateCard.typeCard = selecteTypeCard
                                     updateCard.invoiceDueDate = selectDay
                                     
-                                    try await creditCardVM.updateCreditCard(creditCard: updateCard)
+                                    try await creditCardVM.updateCreditCard(creditCard: updateCard, amount: updateCard.amount)
                                 } else {
                                     try await creditCardVM.addCreditCard(amount: Double(amount) ?? 0.0, numberCard: numberCard, valid: "\(selectMonth)/\(selectYear)", typeCard: selecteTypeCard, userId: userId, invoiceDueDate: selectDay)
                                 }

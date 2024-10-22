@@ -129,7 +129,13 @@ struct HomeView: View {
                     } else {
                         ScrollView(.vertical, showsIndicators: false) {
                             ForEach(transactionVM.transactions, id: \.id) { transaction in
-                                ActivitiesView(iconName: transaction.iconName, title: transaction.title, date: formatDate(transaction.date), amount: formatCurrency(transaction.amount), deleteActivity: $deleteActivity, deleteTransaction: transaction)
+                                ActivitiesView(
+                                    iconName: transaction.iconName,
+                                    title: transaction.title,
+                                    date: formatDate(transaction.date),
+                                    amount: formatCurrency(transaction.amount),
+                                    deleteActivity: $deleteActivity,
+                                    deleteTransaction: transaction)
                                     .onTapGesture {
                                         withAnimation {
                                             deleteActivity.toggle()
@@ -159,7 +165,7 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
+        .environmentObject(TransactionViewModel(creditCardVM: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
         .environmentObject(AuthService())
 }

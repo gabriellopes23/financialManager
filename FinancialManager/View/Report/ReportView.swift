@@ -180,6 +180,6 @@ struct ReportView: View {
 
 #Preview {
     ReportView()
-        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
+        .environmentObject(TransactionViewModel(creditCardVM: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
 }

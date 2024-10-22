@@ -11,12 +11,14 @@ struct TransactionModel: Identifiable, Codable {
     var type: TransactionType
     var date: Date
     var fromAccount: AccountType
+    var creditCard: CreditCardsModel?
     
     enum TransactionType: Codable {
         case income, expense
     }
     
     enum AccountType: Codable {
-        case account, creditCard
+        case account
+        case creditCard
     }
 }

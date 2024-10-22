@@ -39,17 +39,18 @@ struct KeyboardTransactionView: View {
                             amount: amount,
                             type: isIncome ? .income : .expense,
                             date: Date(),
-                            fromAccount: showCreditCards ? .creditCard : .account
+                            fromAccount: showCreditCards ? .creditCard : .account,
+                            creditCard: selectedCard
                         )
-
+                        
                         Task {
-                            try await transactionVM.addTransaction(transaction)
-                            
-                            // Se a transação for uma despesa e usar cartão de crédito, desconta somente do cartão
                             if transaction.fromAccount == .creditCard, !isIncome {
                                 if let card = selectedCard {
                                     try await creditCardVM.subtractFromCard(card, amount: transaction.amount)
+                                    try await transactionVM.addTransaction(transaction, selectedCard: selectedCard)
                                 }
+                            } else {
+                                try await transactionVM.addTransaction(transaction, selectedCard: nil)
                             }
                         }
                     }
@@ -64,7 +65,6 @@ struct KeyboardTransactionView: View {
                         .frame(width: 110, height: 50)
                         .background(RoundedRectangle(cornerRadius: 10).fill(.red))
                 }
-                
             }
             .padding(.horizontal)
             
@@ -105,7 +105,7 @@ struct KeyboardTransactionView: View {
 
 #Preview {
     KeyboardTransactionView(selectedItem: .constant(.Alimentação), inputValue: .constant("57"), isIncome: .constant(true), showCreditCards: .constant(false), selectedCard: CreditCardsModel(userId: "", amount: 200, numberCard: "1234", valid: "12/23", typeCard: .visa, invoiceDueDate: 1))
-        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
+        .environmentObject(TransactionViewModel(creditCardVM: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
         .environmentObject(AuthService())
 }

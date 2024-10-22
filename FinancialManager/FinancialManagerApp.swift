@@ -17,7 +17,7 @@ struct YourApp: App {
     
     private var authService = AuthService()
     
-    @StateObject private var transactionVM = TransactionViewModel(creditCard: CreditCardsViewModel())
+    @StateObject private var transactionVM = TransactionViewModel(creditCardVM: CreditCardsViewModel())
     @StateObject private var creditCardVM = CreditCardsViewModel()
     
     var body: some Scene {

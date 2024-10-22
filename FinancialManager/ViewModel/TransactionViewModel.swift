@@ -5,44 +5,39 @@ import FirebaseFirestore
 @MainActor
 class TransactionViewModel: ObservableObject {
     @Published var totalBalance: Double = 0.0
-    @Published var creditCardDebit: Double = 0.0
     @Published var transactions: [TransactionModel] = []
     
-    private var creditCard: CreditCardsViewModel
+    private var creditCardVM: CreditCardsViewModel
     
-    init(creditCard: CreditCardsViewModel) {
-            self.creditCard = creditCard
-        }
+    init(creditCardVM: CreditCardsViewModel) {
+        self.creditCardVM = creditCardVM
+    }
     
-    func addTransaction(_ transaction: TransactionModel) async throws {
-        // Se a transação for da conta
-        if transaction.fromAccount == .account {
-            // Atualiza o totalBalance baseado no tipo da transação
-            if transaction.type == .income {
-                totalBalance += transaction.amount
-            } else if transaction.type == .expense {
-                totalBalance -= transaction.amount
-            }
-        }
-        // Se a transação for do cartão de crédito
-        else if transaction.fromAccount == .creditCard {
-            // Verifica se existe um cartão correspondente
-            if let cardIndex = creditCard.creditCards.firstIndex(where: { $0.userId == transaction.userId }) {
-                if transaction.type == .expense {
-                    // Subtrai o valor do cartão de crédito apenas se for uma despesa
-                    creditCard.creditCards[cardIndex].amount -= transaction.amount
-                }
-                // Se for uma receita, não faz nada, pois receitas não afetam o saldo do cartão
-            }
-        }
-        
-        do {
+    func addTransaction(_ transaction: TransactionModel, selectedCard: CreditCardsModel?) async throws {
+            
             let transactionData = try Firestore.Encoder().encode(transaction)
             try await Firestore.firestore().collection("transactions").document(transaction.id).setData(transactionData)
+            
+            // Atualizar o saldo total apenas se a transação for da conta
+            if transaction.fromAccount == .account {
+                if transaction.type == .income {
+                    totalBalance += transaction.amount
+                } else {
+                    totalBalance -= transaction.amount
+                }
+            }
+            
+            // Atualizar o saldo do cartão de crédito se a transação for feita nele
+            if transaction.fromAccount == .creditCard, let selectedCard = selectedCard {
+                if transaction.type == .income {
+                    // Adicionar valor ao saldo do cartão
+                    try await creditCardVM.updateCreditCard(creditCard: selectedCard, amount: transaction.amount)
+                } else {
+                    try await creditCardVM.updateCreditCard(creditCard: selectedCard, amount: -transaction.amount)
+                }
+            }
+            
             transactions.append(transaction)
-        } catch {
-            print(error.localizedDescription)
-        }
     }
     
     func deleteTransaction(transaction: TransactionModel) async throws {
@@ -54,14 +49,9 @@ class TransactionViewModel: ObservableObject {
             if let index = transactions.firstIndex(where: { $0.id == transaction.id }) {
                 transactions.remove(at: index)
                 
-                if transaction.fromAccount == .account {
-                    // Apenas atualiza o saldo da conta se for uma transação de conta
+                 if transaction.fromAccount == .account {
+                     // Ele retorna o valor para o totalBalance
                     totalBalance += transaction.type == .income ? transaction.amount : -transaction.amount
-                } else if transaction.fromAccount == .creditCard {
-                    // Caso seja uma transação de cartão de crédito, restaurar o valor no cartão
-                    if let cardIndex = creditCard.creditCards.firstIndex(where: { $0.userId == transaction.userId }) {
-                        creditCard.creditCards[cardIndex].amount += transaction.amount
-                    }
                 }
                 
                 try await Firestore.firestore().collection("transactions").document(document.documentID).delete()

@@ -57,6 +57,6 @@ struct TabBarView: View {
 
 #Preview {
     TabBarView(authService: AuthService())
-        .environmentObject(TransactionViewModel(creditCard: CreditCardsViewModel()))
+        .environmentObject(TransactionViewModel(creditCardVM: CreditCardsViewModel()))
         .environmentObject(CreditCardsViewModel())
 }

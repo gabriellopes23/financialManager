@@ -21,32 +21,33 @@ class CreditCardsViewModel: ObservableObject {
     }
     
     func subtractFromCard(_ creditCard: CreditCardsModel, amount: Double) async throws {
-        
         let cardRef = Firestore.firestore().collection("creditCards")
         
         let querySnapshot = try await cardRef.whereField("userId", isEqualTo: creditCard.userId).getDocuments()
         
         if let document = querySnapshot.documents.first {
-            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id}) {
+            // Atualizar localmente o saldo do cartão
+            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {
                 creditCards[index].amount -= amount
                 
-                let upadateAmount = creditCards[index].amount
-                let cardData: [String: Any] = ["amount": upadateAmount]
+                // Atualizar o saldo do cartão no Firestore
+                let updatedAmount = creditCards[index].amount
+                let cardData: [String: Any] = ["amount": updatedAmount]
                 
                 try await Firestore.firestore().collection("creditCards").document(document.documentID).updateData(cardData)
             }
         } else {
-            print("Documento nao encontrado: \(creditCard.userId)")
+            print("Documento não encontrado: \(creditCard.userId)")
         }
     }
     
-    func updateCreditCard(creditCard: CreditCardsModel) async throws {
+    func updateCreditCard(creditCard: CreditCardsModel, amount: Double) async throws {
         let cardData = try Firestore.Encoder().encode(creditCard)
         
         try await Firestore.firestore().collection("creditCards").document(creditCard.id).updateData(cardData)
         
-        if let index = creditCards.firstIndex(where:  { $0.id == creditCard.id}) {
-            creditCards[index] = creditCard
+        if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {
+            creditCards[index].amount += amount
         }
     }
     
@@ -58,7 +59,7 @@ class CreditCardsViewModel: ObservableObject {
         
         if let document = querySnapshot.documents.first {
             
-            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {                
+            if let index = creditCards.firstIndex(where: { $0.id == creditCard.id }) {
                 creditCards.remove(at: index)
                 
                 try await Firestore.firestore().collection("creditCards").document(document.documentID).delete()
@@ -70,6 +71,7 @@ class CreditCardsViewModel: ObservableObject {
     
     func fetchUserCreditCards(userId: String) async throws {
         let snapshot = try await Firestore.firestore().collection("creditCards").whereField("userId", isEqualTo: userId).getDocuments()
+        
         self.creditCards = try snapshot.documents.compactMap { try $0.data(as: CreditCardsModel.self) }
     }
     
